@@ -1,0 +1,6 @@
+Black = (0,0,0)
+White = (255, 255, 255)
+YellowGreen = (154, 205, 50)
+SkyBlue = (135, 206, 235)
+BurlyWood = (222, 184, 135)
+DarkGray = (169, 169, 169)
