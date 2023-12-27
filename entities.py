@@ -33,6 +33,7 @@ class Player:
         self.size = 25
         self.speed = 10
         self.jump_speed = 15
+        self.start_speed = self.jump_speed
         self.color = Crimson
         self.rect = pygame.Rect(WIDTH / 2, HEIGHT * 2 / 3 - self.size, self.size, self.size)
         self.jumping = False
@@ -52,7 +53,6 @@ class Player:
         if not self.jumping:
             if keys[pygame.K_UP]:
                 self.jumping = True
-                self.start_speed = self.jump_speed
         else:
             if self.jump_speed >= -self.start_speed:
                 self.rect.y -= self.jump_speed
