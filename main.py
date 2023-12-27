@@ -33,9 +33,9 @@ class Game:
         
         # Очки
         self.score = 0
-
+        self.max_score = 0
         # Цвета
-        self.ground_color = YellowGreen
+        self.ground_color = ForestGreen
         self.background_color = SkyBlue
 
     def handle_events(self):
@@ -49,14 +49,18 @@ class Game:
         if self.player.rect.colliderect(self.obstacle.rect):
             # Если произошла коллизия, то игрок перестает прыгать
             self.player.jumping = False
-            self.player.jump_count = 0
+            self.player.jump_speed = self.player.start_speed
             # Возвращаем игрока на начальную позицию
-            self.player.rect = pygame.Rect(WIDTH / 2, HEIGHT * 2 / 3 - self.player.size, self.player.size, self.player.size)        
+            self.player.rect = pygame.Rect(self.player.rect.x, HEIGHT * 2 / 3 - self.player.size, self.player.size, self.player.size)        
+            # Обновление рекорда
+            if self.score > self.max_score:
+                self.max_score = self.score
             # Обнуляем счет
             self.score = 0
+            
         else:
             # Если не произошла коллизия, то проверяем, прошло ли 60 кадров (1 секунда)
-            if self.frame_num == 60:
+            if self.frame_num in range(0, FPS, FPS//4):
                 self.score += 1
 
     def draw_background(self):
@@ -73,21 +77,33 @@ class Game:
         pygame.draw.rect(self.screen, self.obstacle.color, self.obstacle.rect)
 
     def draw_score(self):
-        font = pygame.font.SysFont('comicsans', 48)
-        text = font.render(f"Score: {self.score}", 1, White)     
+        font = pygame.font.SysFont('comicsans', 36)
+        text = font.render(f"Score: {self.score}", 1, White)    
         outline = font.render(f"Score: {self.score}", 1, Black)
+        x,y = 0 + 20, HEIGHT - text.get_height() - 20
         # Отрисовка обводки
         for dx, dy in [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2), (-1, 2), (0, -2), (0, 2), (1, -2), (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]:
-            self.screen.blit(outline, (WIDTH/2-text.get_width()/2 + dx, 20 + dy))
-
+            self.screen.blit(outline, (x + dx, y + dy)) 
         # Отрисовка текста
-        self.screen.blit(text, (WIDTH/2-text.get_width()/2, 20))
+        self.screen.blit(text, (x, y))
+
+    def draw_record(self):
+        font = pygame.font.SysFont('comicsans', 36)
+        text = font.render(f"Session record: {self.max_score}", 1, White)    
+        outline = font.render(f"Session record: {self.max_score}", 1, Black)
+        x,y = WIDTH-text.get_width() - 20, HEIGHT - text.get_height() - 20
+        # Отрисовка обводки
+        for dx, dy in [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2), (-1, 2), (0, -2), (0, 2), (1, -2), (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]:
+            self.screen.blit(outline, (x + dx, y + dy))
+        # Отрисовка текста
+        self.screen.blit(text, (WIDTH-text.get_width() - 20, HEIGHT - text.get_height() - 20))
 
     def draw_screen(self):
         self.draw_background()
         self.draw_player()
         self.draw_obstacle()
         self.draw_score()
+        self.draw_record()
         pygame.display.flip()
 
     def count_frame(self):
