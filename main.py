@@ -118,8 +118,8 @@ class Game:
             self.handle_events()          
             self.player.move(keys)
             self.player.jump(keys)
-            self.check_collision()
             self.obstacle.move()
+            self.check_collision()
             self.draw_screen()
 
             # Ограничение FPS
