@@ -34,6 +34,7 @@ class Game:
         # Очки
         self.score = 0
         self.max_score = 0
+
         # Цвета
         self.ground_color = ForestGreen
         self.background_color = SkyBlue
@@ -44,20 +45,19 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
+    def record_update(self):
+        # Обновление рекорда
+        if self.score > self.max_score:
+            self.max_score = self.score     
+
     def check_collision(self):
         # Проверяем, произошла ли коллизия между игроком и препятствием
         if self.player.rect.colliderect(self.obstacle.rect):
-            # Если произошла коллизия, то игрок перестает прыгать
-            self.player.jumping = False
-            self.player.jump_speed = self.player.start_speed
-            # Возвращаем игрока на начальную позицию
-            self.player.rect = pygame.Rect(self.player.rect.x, HEIGHT * 2 / 3 - self.player.size, self.player.size, self.player.size)        
-            # Обновление рекорда
-            if self.score > self.max_score:
-                self.max_score = self.score
+            temp = self.player.rect.x
+            self.player = Player()
+            self.player.rect.x = temp
             # Обнуляем счет
-            self.score = 0
-            
+            self.score = 0                       
         else:
             # Если не произошла коллизия, то проверяем, прошло ли 60 кадров (1 секунда)
             if self.frame_num in range(0, FPS, FPS//4):
@@ -120,6 +120,7 @@ class Game:
             self.player.jump(keys)
             self.obstacle.move()
             self.check_collision()
+            self.record_update()
             self.draw_screen()
 
             # Ограничение FPS

@@ -32,6 +32,7 @@ class Player:
     def __init__(self):
         self.size = 25
         self.speed = 10
+        self.current_speed = 0
         self.jump_speed = 15
         self.start_speed = self.jump_speed
         self.color = Crimson
@@ -40,14 +41,26 @@ class Player:
         self.jump_count = 0
 
     def move(self, keys):
+        self.rect.x += self.current_speed
+
+        if self.current_speed > 0 :
+            self.current_speed -= self.speed*0.025
+        elif self.current_speed < 0:
+            self.current_speed += self.speed*0.025
+        else:
+            self.current_speed = 0
+
         if keys[pygame.K_LEFT]:
-            self.rect.x -= self.speed
-            if self.rect.x < 0:
-                self.rect.x = WIDTH
+            if self.current_speed > -self.speed:
+                self.current_speed -= self.speed*0.1
         if keys[pygame.K_RIGHT]:
-            self.rect.x += self.speed
-            if self.rect.x > WIDTH:
-                self.rect.x = 0
+            if self.current_speed < self.speed:
+                self.current_speed += self.speed*0.1
+
+        if self.rect.x < 0:
+            self.rect.x = WIDTH
+        elif self.rect.x > WIDTH:
+            self.rect.x = 0
 
     def jump(self, keys):
         if not self.jumping:
