@@ -8,8 +8,8 @@ pygame.init()
 infoObject = pygame.display.Info()
 
 # Размер экрана
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 1000
+HEIGHT = 500
 
 # Константы
 FPS = 60
@@ -71,10 +71,15 @@ class Game:
         pygame.draw.rect(self.screen, self.ground_color, pygame.Rect(0, HEIGHT / 3 * 2, WIDTH, HEIGHT / 3))  
 
     def draw_player(self):
-        pygame.draw.rect(self.screen, self.player.color, self.player.rect)
+        pygame.draw.rect(self.screen, self.player.color, self.player.rect,2)
+        self.player.texture = pygame.transform.scale(self.player.texture, (self.player.size, self.player.size))
+        self.screen.blit(self.player.texture,(self.player.rect.x, self.player.rect.y))
 
     def draw_obstacle(self):
-        pygame.draw.rect(self.screen, self.obstacle.color, self.obstacle.rect)
+        self.obstacle.texture = pygame.transform.scale(self.obstacle.texture, (self.obstacle.size, self.obstacle.size))     
+        self.screen.blit(pygame.transform.rotate(self.obstacle.texture, 360/FPS*self.frame_num*(self.obstacle.speed/abs(self.obstacle.speed))),
+                         (self.obstacle.rect.x-10, self.obstacle.rect.y-10))
+        #pygame.draw.rect(self.screen, self.obstacle.color, self.obstacle.rect,2)
 
     def draw_score(self):
         font = pygame.font.SysFont('comicsans', 36)
