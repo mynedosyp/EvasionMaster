@@ -6,10 +6,14 @@ from colors import *
 pygame.init()
 # Получаем информацию о дисплее
 infoObject = pygame.display.Info()
+button_image = pygame.image.load('sprites/fullscreen.png')
+button_x = 10
+button_y = 10
+
 
 # Размер экрана
-WIDTH = 1000
-HEIGHT = 500
+WIDTH = 1920//2
+HEIGHT = 1080//2
 
 # Константы
 FPS = 60
@@ -21,6 +25,8 @@ class Game:
         
         # Создание окна
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        # Флаг полноэкранного режима
+        self.fullscreen = False
         # Создание персонажа
         self.player = Player()
 
@@ -40,10 +46,27 @@ class Game:
         self.background_color = SkyBlue
 
     def handle_events(self):
+        global WIDTH, HEIGHT
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                pass
+                # Проверка нажатия на кнопку
+                # if event.pos[0] > button_x and event.pos[0] < button_x + button_image.get_width():
+                #     if event.pos[1] > button_y and event.pos[1] < button_y + button_image.get_height():
+                #         # Переключение режима полноэкранного/окна
+                #         if self.fullscreen:
+                #             #WIDTH, HEIGHT = 1920//2, 1080//2
+                #             self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+                #             self.fullscreen = False
+                #         else:
+                #             #WIDTH, HEIGHT = infoObject.current_w, infoObject.current_h
+                #             self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+                #             self.fullscreen = True
+    def draw_gui(self):
+        self.screen.blit(button_image, (button_x, button_y))
 
     def record_update(self):
         # Обновление рекорда
@@ -52,10 +75,14 @@ class Game:
 
     def check_collision(self):
         # Проверяем, произошла ли коллизия между игроком и препятствием
+        self.background_color = SkyBlue
         if self.player.rect.colliderect(self.obstacle.rect):
-            temp = self.player.rect.x
-            self.player = Player()
-            self.player.rect.x = temp
+            # tempx = self.player.rect.x
+            # tempy = self.player.rect.y
+            # self.player = Player()
+            # self.player.rect.x = tempx
+            # self.player.rect.y = tempy
+            self.background_color=(255,0,0)
             # Обнуляем счет
             self.score = 0                       
         else:
@@ -105,6 +132,7 @@ class Game:
 
     def draw_screen(self):
         self.draw_background()
+        #self.draw_gui()
         self.draw_player()
         self.draw_obstacle()
         self.draw_score()
@@ -127,7 +155,7 @@ class Game:
             self.check_collision()
             self.record_update()
             self.draw_screen()
-
+        
             # Ограничение FPS
             self.clock.tick(FPS)
 

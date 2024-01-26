@@ -9,7 +9,7 @@ class Obstacle:
 
     def __init__(self):
         self.size = 80
-        self.speed = 12
+        self.speed = 11
         self.color = DimGrey
         self.rect = pygame.Rect(WIDTH, HEIGHT * 2 / 3 - self.size, self.size, self.size)
         self.texture = pygame.image.load("sprites/obstacle/body.png")
