@@ -1,7 +1,18 @@
 import pygame
 import sys
+import toml
 from entities import *
 from colors import *
+
+
+# Открытие файла pyproject.toml
+with open('pyproject.toml', 'r') as file:
+    # Чтение файла в формате TOML
+    data = toml.load(file)
+
+# Получение версии проекта
+version = data['tool']['poetry']['version']
+
 
 pygame.init()
 # Получаем информацию о дисплее
@@ -137,6 +148,7 @@ class Game:
         self.draw_obstacle()
         self.draw_score()
         self.draw_record()
+        pygame.display.set_caption(f"Evasion master v{version}, ({self.clock.get_fps():.3})")    
         pygame.display.flip()
 
     def count_frame(self):
