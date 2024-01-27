@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evasionmaster"
-version = "0.1.0"
+version = "0.3.0"
 description = ""
 authors = ["Samat <SamatDav02@gmail.com>"]
 readme = "README.md"
@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 pygame-ce = "^2.4.0"
+toml = "^0.10.2"
 
 
 [build-system]

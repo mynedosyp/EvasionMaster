@@ -8,10 +8,11 @@ class Obstacle:
     
 
     def __init__(self):
-        self.size = 50
-        self.speed = 12
+        self.size = 80
+        self.speed = 11
         self.color = DimGrey
         self.rect = pygame.Rect(WIDTH, HEIGHT * 2 / 3 - self.size, self.size, self.size)
+        self.texture = pygame.image.load("sprites/obstacle/body.png")
 
     def move(self):
         self.rect.x -= self.speed
@@ -30,15 +31,18 @@ class Obstacle:
 class Player:
     
     def __init__(self):
-        self.size = 25
+        self.size = 60
         self.speed = 10
         self.current_speed = 0
         self.jump_speed = 15
+        self.jumping = False
+        self.jump_count = 0
         self.start_speed = self.jump_speed
         self.color = Crimson
         self.rect = pygame.Rect(WIDTH / 2, HEIGHT * 2 / 3 - self.size, self.size, self.size)
-        self.jumping = False
-        self.jump_count = 0
+        self.texture = pygame.image.load("sprites/player/body.png")
+        self.anim = [pygame.image.load(f"sprites/player/anims/_{i:0{2}}.png") for i in range(2,12)]
+
 
     def move(self, keys):
         self.rect.x += self.current_speed
