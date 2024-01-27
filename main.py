@@ -76,6 +76,7 @@ class Game:
                 #             #WIDTH, HEIGHT = infoObject.current_w, infoObject.current_h
                 #             self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                 #             self.fullscreen = True
+            
     def draw_gui(self):
         self.screen.blit(button_image, (button_x, button_y))
 
@@ -88,11 +89,6 @@ class Game:
         # Проверяем, произошла ли коллизия между игроком и препятствием
         self.background_color = SkyBlue
         if self.player.rect.colliderect(self.obstacle.rect):
-            # tempx = self.player.rect.x
-            # tempy = self.player.rect.y
-            # self.player = Player()
-            # self.player.rect.x = tempx
-            # self.player.rect.y = tempy
             self.background_color=(255,0,0)
             # Обнуляем счет
             self.score = 0                       
@@ -109,9 +105,29 @@ class Game:
         pygame.draw.rect(self.screen, self.ground_color, pygame.Rect(0, HEIGHT / 3 * 2, WIDTH, HEIGHT / 3))  
 
     def draw_player(self):
-        pygame.draw.rect(self.screen, self.player.color, self.player.rect,2)
+        if abs(self.player.jump_speed) != 15:
+            if 14 >= abs(self.player.jump_speed) > 12:
+                self.player.texture = self.player.anim[6]
+            elif 12 >= abs(self.player.jump_speed) > 10 :
+                self.player.texture = self.player.anim[7]
+            elif 10 >= abs(self.player.jump_speed) > 8 :
+                self.player.texture = self.player.anim[8]
+            elif 8 >= abs(self.player.jump_speed) >= 0 :
+                self.player.texture = self.player.anim[9]
+            else:
+                self.player.texture = self.player.anim[0]
+        else:
+            if self.player.current_speed > 0 :
+                self.player.texture = pygame.transform.flip(self.player.anim[self.frame_num//12], True, False)
+            elif self.player.current_speed < 0:
+                self.player.texture = pygame.transform.flip(self.player.anim[self.frame_num//12], False, False) 
+            else:
+                self.player.texture = self.player.anim[0]  
+            
+            
         self.player.texture = pygame.transform.scale(self.player.texture, (self.player.size, self.player.size))
-        self.screen.blit(self.player.texture,(self.player.rect.x, self.player.rect.y))
+        self.screen.blit(self.player.texture, (self.player.rect.x, self.player.rect.y))
+        #pygame.draw.rect(self.screen, self.player.color, self.player.rect,2)
 
     def draw_obstacle(self):
         self.obstacle.texture = pygame.transform.scale(self.obstacle.texture, (self.obstacle.size, self.obstacle.size))     
@@ -148,7 +164,7 @@ class Game:
         self.draw_obstacle()
         self.draw_score()
         self.draw_record()
-        pygame.display.set_caption(f"Evasion master v{version}, ({self.clock.get_fps():.3})")    
+        pygame.display.set_caption(f"Evasion master v {version}, ({self.clock.get_fps():.3})")    
         pygame.display.flip()
 
     def count_frame(self):

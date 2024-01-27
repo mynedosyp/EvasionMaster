@@ -31,7 +31,7 @@ class Obstacle:
 class Player:
     
     def __init__(self):
-        self.size = 40
+        self.size = 60
         self.speed = 10
         self.current_speed = 0
         self.jump_speed = 15
@@ -41,6 +41,7 @@ class Player:
         self.color = Crimson
         self.rect = pygame.Rect(WIDTH / 2, HEIGHT * 2 / 3 - self.size, self.size, self.size)
         self.texture = pygame.image.load("sprites/player/body.png")
+        self.anim = [pygame.image.load(f"sprites/player/anims/_{i:0{2}}.png") for i in range(2,12)]
 
 
     def move(self, keys):
