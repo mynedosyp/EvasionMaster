@@ -39,7 +39,7 @@ class Player:
         self.jump_count = 0
         self.start_speed = self.jump_speed
         self.color = Crimson
-        self.rect = pygame.Rect(WIDTH / 2, HEIGHT * 2 / 3 - self.size, self.size, self.size)
+        self.rect = pygame.Rect(WIDTH / 2, HEIGHT * 2 / 3 - self.size, self.size/2, self.size//5*4)
         self.texture = pygame.image.load("sprites/player/body.png")
         self.anim = [pygame.image.load(f"sprites/player/anims/_{i:0{2}}.png") for i in range(2,12)]
 

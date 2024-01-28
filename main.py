@@ -126,13 +126,16 @@ class Game:
             
             
         self.player.texture = pygame.transform.scale(self.player.texture, (self.player.size, self.player.size))
-        self.screen.blit(self.player.texture, (self.player.rect.x, self.player.rect.y))
+        self.screen.blit(self.player.texture, (self.player.rect.x-self.player.size//4, self.player.rect.y))
         #pygame.draw.rect(self.screen, self.player.color, self.player.rect,2)
 
     def draw_obstacle(self):
-        self.obstacle.texture = pygame.transform.scale(self.obstacle.texture, (self.obstacle.size, self.obstacle.size))     
-        self.screen.blit(pygame.transform.rotate(self.obstacle.texture, 360/FPS*self.frame_num*(self.obstacle.speed/abs(self.obstacle.speed))),
-                         (self.obstacle.rect.x-10, self.obstacle.rect.y-10))
+        self.obstacle.texture = pygame.transform.scale(self.obstacle.texture,
+                                                        (self.obstacle.size, self.obstacle.size))     
+        self.screen.blit(
+            pygame.transform.rotate(self.obstacle.texture, 360/FPS*self.frame_num*(self.obstacle.speed/abs(self.obstacle.speed))),
+            (self.obstacle.rect.x-10, self.obstacle.rect.y-10)
+            )
         #pygame.draw.rect(self.screen, self.obstacle.color, self.obstacle.rect,2)
 
     def draw_score(self):
