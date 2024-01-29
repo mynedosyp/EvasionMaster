@@ -150,8 +150,8 @@ class Game:
 
     def draw_score(self):
         font = pygame.font.SysFont('comicsans', 36)
-        text = font.render(f"Score: {self.score}", 1, White)    
-        outline = font.render(f"Score: {self.score}", 1, Black)
+        text = font.render(f"Score: {self.score}({len(self.obstacles)})", 1, White)    
+        outline = font.render(f"Score: {self.score}({len(self.obstacles)})", 1, Black)
         x,y = 0 + 20, HEIGHT - text.get_height() - 20
         # Отрисовка обводки
         for dx, dy in [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2), (-1, 2), (0, -2), (0, 2), (1, -2), (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]:
@@ -187,7 +187,6 @@ class Game:
 
     def run(self):
         while True:
-            print(len(self.obstacles))
             keys = pygame.key.get_pressed()
             self.count_frame()
             self.handle_events()          
