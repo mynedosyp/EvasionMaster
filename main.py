@@ -23,8 +23,8 @@ button_y = 10
 
 
 # Размер экрана
-WIDTH = 1920//2
-HEIGHT = 1080//2
+WIDTH = 1920//3*2
+HEIGHT = 1080//3*2
 
 # Константы
 FPS = 60
@@ -42,7 +42,9 @@ class Game:
         self.player = Player()
 
         # Создание препятствия
-        self.obstacle = Obstacle()
+        self.obstacles = [Obstacle(),]
+
+        self.die_timer = 0
 
         # Создание часов
         self.clock = pygame.time.Clock()
@@ -86,20 +88,28 @@ class Game:
             self.max_score = self.score     
 
     def check_collision(self):
-        # Проверяем, произошла ли коллизия между игроком и препятствием
-        self.background_color = SkyBlue
-        if self.player.rect.colliderect(self.obstacle.rect):
-            self.background_color=(255,0,0)
-            # Обнуляем счет
-            self.score = 0                       
-        else:
-            # Если не произошла коллизия, то проверяем, прошло ли 60 кадров (1 секунда)
-            if self.frame_num in range(0, FPS, FPS//4):
-                self.score += 1
+        for obstacle in self.obstacles:
+            # Проверяем, произошла ли коллизия между игроком и препятствием
+            if self.player.rect.colliderect(obstacle.rect):
+                self.die_timer=FPS//2
+                # Обнуляем счет
+                self.score = 0
+                self.obstacles = [Obstacle(),]                       
+            
+    def score_inc(self):
+        # проверяем, прошло ли 60 кадров (1 секунда)
+        if self.frame_num in range(0, FPS, FPS//4) and self.die_timer == 0:
+            self.score += 1
+            if self.score % 50 == 0 and len(self.obstacles) < 5:
+                self.obstacles.append(Obstacle())    
 
     def draw_background(self):
         # Отрисовка фона
-        self.screen.fill(self.background_color)  
+        if self.die_timer == 0:
+            self.screen.fill(self.background_color)
+        else:
+            self.screen.fill((255,20,0))
+            self.die_timer -= 1
 
         # Отрисовка земли
         pygame.draw.rect(self.screen, self.ground_color, pygame.Rect(0, HEIGHT / 3 * 2, WIDTH, HEIGHT / 3))  
@@ -124,19 +134,19 @@ class Game:
             else:
                 self.player.texture = self.player.anim[0]  
             
-            
         self.player.texture = pygame.transform.scale(self.player.texture, (self.player.size, self.player.size))
         self.screen.blit(self.player.texture, (self.player.rect.x-self.player.size//4, self.player.rect.y))
         #pygame.draw.rect(self.screen, self.player.color, self.player.rect,2)
 
     def draw_obstacle(self):
-        self.obstacle.texture = pygame.transform.scale(self.obstacle.texture,
-                                                        (self.obstacle.size, self.obstacle.size))     
-        self.screen.blit(
-            pygame.transform.rotate(self.obstacle.texture, 360/FPS*self.frame_num*(self.obstacle.speed/abs(self.obstacle.speed))),
-            (self.obstacle.rect.x-10, self.obstacle.rect.y-10)
-            )
-        #pygame.draw.rect(self.screen, self.obstacle.color, self.obstacle.rect,2)
+        for obstacle in self.obstacles:
+            obstacle.texture = pygame.transform.scale(obstacle.texture,
+                                                            (obstacle.size, obstacle.size))     
+            self.screen.blit(
+                pygame.transform.rotate(obstacle.texture, 360/FPS*self.frame_num*(obstacle.speed/abs(obstacle.speed))),
+                (obstacle.rect.x-10, obstacle.rect.y-10)
+                )
+            #pygame.draw.rect(self.screen, obstacle.color, obstacle.rect,2)
 
     def draw_score(self):
         font = pygame.font.SysFont('comicsans', 36)
@@ -177,13 +187,17 @@ class Game:
 
     def run(self):
         while True:
+            print(len(self.obstacles))
             keys = pygame.key.get_pressed()
             self.count_frame()
             self.handle_events()          
             self.player.move(keys)
             self.player.jump(keys)
-            self.obstacle.move()
+            if (self.die_timer == 0):
+                for obstacle in self.obstacles:
+                    obstacle.move()
             self.check_collision()
+            self.score_inc()
             self.record_update()
             self.draw_screen()
         

@@ -8,8 +8,8 @@ class Obstacle:
     
 
     def __init__(self):
-        self.size = 80
-        self.speed = 11
+        self.size = 60
+        self.speed = 10
         self.color = DimGrey
         self.rect = pygame.Rect(WIDTH, HEIGHT * 2 / 3 - self.size, self.size, self.size)
         self.texture = pygame.image.load("sprites/obstacle/body.png")
@@ -69,7 +69,7 @@ class Player:
     def jump(self, keys):
         if not self.jumping:
             if keys[pygame.K_UP]:
-                self.jumping = True
+                self.jumping = True       
         else:
             if self.jump_speed >= -self.start_speed:
                 self.rect.y -= self.jump_speed
@@ -77,7 +77,10 @@ class Player:
             else:
                 self.jump_speed = self.start_speed
                 self.jumping = False
-
+        if keys[pygame.K_DOWN]:
+            self.jump_speed = 15
+            self.jumping = False
+            self.rect.y = HEIGHT * 2 / 3 - self.size
                 
                 
 
